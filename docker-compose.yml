@@ -8,8 +8,9 @@ services:
             - ./docker/development/nginx/conf.d:/etc/nginx/conf.d
         depends_on: 
             - jenkins
-    jenkins: 
-        image: jenkinsci/blueocean
+    jenkins:
+        build: 
+            context: ./docker/development/jenkins
         environment: 
             DOCKER_HOST: tcp://docker:2376
             DOCKER_CERT_PATH: /certs/client
