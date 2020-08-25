@@ -2,34 +2,42 @@ version: '3.7'
 services:
     nginx:
         image: nginx:alpine
+        restart: always
         ports:
-            - "8000:8000"
+            - "80:80"
+            - "443:443"
         volumes:
-            - ./docker/development/nginx/conf.d:/etc/nginx/conf.d
-        depends_on: 
+            - /etc/letsencrypt:/etc/letsencrypt:ro
+            - /var/www/html:/var/www/html:ro
+            - ./docker/production/nginx/conf.d:/etc/nginx/conf.d:ro
+        depends_on:
             - jenkins
+
     jenkins:
-        build: 
+        build:
             context: ./docker/common/jenkins
-        environment: 
+        environment:
             DOCKER_HOST: tcp://docker:2376
             DOCKER_CERT_PATH: /certs/client
             DOCKER_TLS_VERIFY: 1
         volumes:
             - jenkins-data:/var/jenkins_home
             - docker-certs:/certs/client:ro
-        depends_on: 
-            - docker   
+        depends_on:
+            - docker
+
     docker:
         image: docker:dind
         privileged: true
-        environment: 
+        environment:
             DOCKER_TLS_CERTDIR: /certs
-        volumes: 
+        volumes:
             - jenkins-data:/var/jenkins_home
             - docker-certs:/certs/client
             - docker-data:/var/lib/docker
+
 volumes:
     jenkins-data:
     docker-certs:
     docker-data:
+        
