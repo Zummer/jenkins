@@ -10,8 +10,6 @@ services:
             - /etc/letsencrypt:/etc/letsencrypt:ro
             - /var/www/html:/var/www/html:ro
             - ./docker/production/nginx/conf.d:/etc/nginx/conf.d:ro
-        depends_on:
-            - jenkins
 
     jenkins:
         build:

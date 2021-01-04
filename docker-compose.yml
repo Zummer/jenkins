@@ -6,8 +6,6 @@ services:
             - "8000:8000"
         volumes:
             - ./docker/development/nginx/conf.d:/etc/nginx/conf.d
-        depends_on: 
-            - jenkins
     jenkins:
         build: 
             context: ./docker/common/jenkins
